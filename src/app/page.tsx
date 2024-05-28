@@ -1,15 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import {useRef, useState} from 'react';
 import { ClientMessage } from './actions';
 import { useActions, useUIState } from 'ai/rsc';
 import { nanoid } from 'nanoid';
 
 export default function Home() {
-  const [input, setInput] = useState<string>('');
+  const [input, setInput] = useState<string>('Tell me a long joke with 5 paragraphs, formatting, and emojis');
   const [conversation, setConversation] = useUIState();
   const { continueConversation } = useActions();
-
+  const ref = useRef<HTMLInputElement>(null);
+  
   return (
     <div className="w-full">
       <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
@@ -22,24 +23,27 @@ export default function Home() {
       </div>
 
       <form
-        className="flex items-center justify-center fixed bottom-0 w-full p-8"
+        className="flex gap-1 items-center justify-center fixed bottom-0 w-full p-8"
         onSubmit={async (e) => {
-        e.preventDefault();
-        setInput('');
-        
-        setConversation((currentConversation: ClientMessage[]) => [
-          ...currentConversation,
-          {id: nanoid(), role: 'user', display: input},
-        ]);
-
-        const message = await continueConversation(input);
-
-        setConversation((currentConversation: ClientMessage[]) => [
-          ...currentConversation,
-          message,
-        ]);
-      }}>
+          e.preventDefault();
+          ref.current?.blur();
+          setInput('');
+          
+          setConversation((currentConversation: ClientMessage[]) => [
+            ...currentConversation,
+            {id: nanoid(), role: 'user', display: input},
+          ]);
+  
+          const message = await continueConversation(input);
+  
+          setConversation((currentConversation: ClientMessage[]) => [
+            ...currentConversation,
+            message,
+          ]);
+        }}
+      >
         <input
+          ref={ref}
           className="w-full p-2 border rounded border-gray-700 bg-gray-900 text-gray-200 max-w-lg"
           type="text"
           value={input}
@@ -47,6 +51,7 @@ export default function Home() {
             setInput(event.target.value);
           }}
         />
+        <button type="submit" className="font-mono p-2 bg-gray-900 border border-gray-700">Submit</button>
       </form>
   </div>
 )};
