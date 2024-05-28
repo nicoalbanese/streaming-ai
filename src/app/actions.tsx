@@ -31,7 +31,7 @@ export async function continueConversation(
   const history = getMutableAIState();
 
   const result = await streamUI({
-    model: openAI('gpt-3.5-turbo'),
+    model: openAI('gpt-4o'),
     messages: [...history.get(), { role: 'user', content: input }],
     text: ({ content, done }) => {
       if (done) {
@@ -43,23 +43,23 @@ export async function continueConversation(
 
       return <div>{content}</div>;
     },
-    tools: {
-      deploy: {
-        description: 'Deploy repository to vercel',
-        parameters: z.object({
-          repositoryName: z
-            .string()
-            .describe('The name of the repository, example: vercel/ai-chatbot'),
-        }),
-        generate: async function* ({ repositoryName }) {
-          yield <div>Cloning repository {repositoryName}...</div>; // [!code highlight:5]
-          await new Promise(resolve => setTimeout(resolve, 3000));
-          yield <div>Building repository {repositoryName}...</div>;
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          return <div>{repositoryName} deployed!</div>;
-        },
-      },
-    },
+    // tools: {
+    //   deploy: {
+    //     description: 'Deploy repository to vercel',
+    //     parameters: z.object({
+    //       repositoryName: z
+    //         .string()
+    //         .describe('The name of the repository, example: vercel/ai-chatbot'),
+    //     }),
+    //     generate: async function* ({ repositoryName }) {
+    //       yield <div>Cloning repository {repositoryName}...</div>; // [!code highlight:5]
+    //       await new Promise(resolve => setTimeout(resolve, 3000));
+    //       yield <div>Building repository {repositoryName}...</div>;
+    //       await new Promise(resolve => setTimeout(resolve, 2000));
+    //       return <div>{repositoryName} deployed!</div>;
+    //     },
+    //   },
+    // },
   });
 
   return {
