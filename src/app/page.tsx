@@ -4,10 +4,12 @@ import { useRef, useState } from "react";
 import { ClientMessage } from "./actions";
 import { useActions, useUIState } from "ai/rsc";
 import { nanoid } from "nanoid";
+import { unstable_noStore } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
 export default function Home() {
+  unstable_noStore();
   const [input, setInput] = useState<string>(
     "Tell me a joke with 3 paragraphs, formatting, and emojis",
   );
