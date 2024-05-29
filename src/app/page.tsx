@@ -6,7 +6,7 @@ import { useActions, useUIState } from 'ai/rsc';
 import { nanoid } from 'nanoid';
 
 export default function Home() {
-  const [input, setInput] = useState<string>('Tell me a long joke with 5 paragraphs, formatting, and emojis');
+  const [input, setInput] = useState<string>('Tell me a joke with 3 paragraphs, formatting, and emojis');
   const [conversation, setConversation] = useUIState();
   const { continueConversation } = useActions();
   const ref = useRef<HTMLInputElement>(null);
