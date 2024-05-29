@@ -1,19 +1,19 @@
-'use server';
+"use server";
 
-import { createAI, getMutableAIState, streamUI } from 'ai/rsc';
-import {createOpenAI} from '@ai-sdk/openai';
-import { ReactNode } from 'react';
-import { z } from 'zod';
-import { nanoid } from 'nanoid';
+import { createAI, getMutableAIState, streamUI } from "ai/rsc";
+import { createOpenAI } from "@ai-sdk/openai";
+import { ReactNode } from "react";
+import { z } from "zod";
+import { nanoid } from "nanoid";
 
 export interface ServerMessage {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
 }
 
 export interface ClientMessage {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   display: ReactNode;
 }
 
@@ -24,20 +24,17 @@ const openAI = createOpenAI({
 export async function continueConversation(
   input: string,
 ): Promise<ClientMessage> {
-  'use server';
-  
-  
-
+  "use server";
   const history = getMutableAIState();
 
   const result = await streamUI({
-    model: openAI('gpt-4o'),
-    messages: [...history.get(), { role: 'user', content: input }],
+    model: openAI("gpt-3.5-turbo"),
+    messages: [...history.get(), { role: "user", content: input }],
     text: ({ content, done }) => {
       if (done) {
         history.done((messages: ServerMessage[]) => [
           ...messages,
-          { role: 'assistant', content },
+          { role: "assistant", content },
         ]);
       }
 
@@ -64,7 +61,7 @@ export async function continueConversation(
 
   return {
     id: nanoid(),
-    role: 'assistant',
+    role: "assistant",
     display: result.value,
   };
 }
