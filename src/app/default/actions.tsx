@@ -28,7 +28,7 @@ export async function continueConversation(
   const history = getMutableAIState();
 
   const result = await streamUI({
-    model: openAI("gpt-3.5-turbo"),
+    model: openAI("gpt-4-turbo"),
     messages: [...history.get(), { role: "user", content: input }],
     text: ({ content, done }) => {
       if (done) {
